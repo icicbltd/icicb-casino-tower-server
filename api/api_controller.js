@@ -33,17 +33,6 @@ module.exports = {
             pitNum: pitValue
         }
         try {
-            try {
-                await axios.post(
-                    process.env.PLATFORM_SERVER + "api/games/bet",
-                    {
-                        token: user[token].userToken,
-                        amount: user[token].betAmount,
-                    }
-                );
-            } catch (err) {
-                throw new Error("Bet Error!");
-            }
             var pit = getArray(user[token].pitNum);
             var total = user[token].amount - user[token].betAmount;
             console.log(pit);
@@ -85,6 +74,17 @@ module.exports = {
             loop: n
         }
         try {
+            try {
+                await axios.post(
+                    process.env.PLATFORM_SERVER + "api/games/bet",
+                    {
+                        token: user[token].userToken,
+                        amount: user[token].betAmount,
+                    }
+                );
+            } catch (err) {
+                throw new Error("Bet Error!");
+            }
             var raisePrice = user[token].betAmount * ScoreArray[user[token].pitNum - 1][user[token].loop - 2];
             try {
                 await axios.post(
@@ -99,7 +99,7 @@ module.exports = {
                 throw new Error("WinLose Error!");
             }
             var total = user[token].amount + raisePrice;
-            var msg = "You win! ->" + "+" + raisePrice.toFixed(3);
+            var msg = "You win! : +" + raisePrice.toFixed(3);
             try {
                 res.json({
                     total: total,
